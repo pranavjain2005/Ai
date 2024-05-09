@@ -1,0 +1,34 @@
+NaiveBayes
+
+
+from google.colab import files
+upload = files.upload()
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+
+# Load the dataset from CSV file
+df = pd.read_csv("User_Data.csv")
+
+# Assuming 'Purchased' is the target variable
+X = df[['Age', 'EstimatedSalary']]  # Features: Age and EstimatedSalary
+y = df['Purchased']                  # Target variable: Purchased
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+
+# Initialize Gaussian Naive Bayes classifier
+gnb = GaussianNB()
+
+# Train the classifier
+gnb.fit(X_train, y_train)
+
+# Predict the labels for test set
+y_pred = gnb.predict(X_test)
+
+# Count the number of mislabeled points
+mislabeled_points = (y_test != y_pred).sum()
+
+# Print the result
+print("Number of mislabeled points out of a total %d points : %d" % (X_test.shape[0], mislabeled_points))
